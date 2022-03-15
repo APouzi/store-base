@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 from django.conf import settings
+from product.models import Product
 # Create your views here.
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, last_name, password, **other_fields):
@@ -47,6 +48,8 @@ class EndUser(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.user.email
 
 class ShippingAddress(models.Model):
     userProfile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -54,14 +57,17 @@ class ShippingAddress(models.Model):
     state = models.CharField(blank=True,max_length = 2)
     zip = models.IntegerField(null=True)
     unit_num = models.IntegerField(null = True)
+    def __str__(self):
+        return self.userProfile.user.email 
 
 class UserOrders(models.Model):
     userProfile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     
-
+    def __str__(self):
+       return self.userProfile.user.email
 
 class WishList(models.Model):
-    userProfile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank = True)
-
+    userProfile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, null = True)
+    products = models.ManyToManyField(Product)
     def __str__(self):
         return self.userProfile.user.email

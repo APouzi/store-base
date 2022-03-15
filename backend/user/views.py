@@ -1,7 +1,7 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import CreateAPIView
 from .models import EndUser
 from .serializers import EndUserWithToken
-from rest_framework.permissions import IsAuthenticated
+
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView

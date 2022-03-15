@@ -14,6 +14,7 @@ class EndUserWithToken(ModelSerializer):
         token["email"] = obj.email
         return str(token.access_token)
     
+    # Move this logic over to the Object manager so the signals can be activated (possibly not having to creat eh signals.)
     def create(self, validated_data):
         endUser = EndUser.objects.create_user(**validated_data)
         userprofile = UserProfile.objects.create(user = endUser)
@@ -21,3 +22,4 @@ class EndUserWithToken(ModelSerializer):
         UserOrders.objects.create(userProfile = userprofile)
         WishList.objects.create(userProfile = userprofile)
         return endUser
+    
